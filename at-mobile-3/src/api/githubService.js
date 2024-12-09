@@ -50,6 +50,18 @@ class GitHubService {
     }
   }
 
+  async createIssue(repoOwner, repoName, issueData) {
+    try {
+      const response = await this.api.post(
+        `/repos/${repoOwner}/${repoName}/issues`, 
+        issueData
+      );
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
   handleError(error) {
     console.error("GitHub API Error:", error);
     return {

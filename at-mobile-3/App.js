@@ -10,6 +10,7 @@ import RepositoriesScreen from "./src/screens/RepositoriesScreen";
 import IssuesScreen from "./src/screens/IssuesScreen";
 import RepositoryDetailsScreen from "./src/screens/RepositoryDetailsScreen";
 import IssueDetailsScreen from "./src/screens/IssuesDetailsScreen";
+import CreateIssueScreen from "./src/screens/CreateIssueScreen";
 import BottomNavigation from "./src/components/BottomNavigation";
 
 const Tab = createBottomTabNavigator();
@@ -66,6 +67,11 @@ const AppNavigator = () => {
             name="IssueDetails"
             component={IssueDetailsScreen}
             options={{ title: "Detalhes da Issue" }}
+          />
+          <Tab.Screen 
+            name="CreateIssue" 
+            component={CreateIssueScreen} 
+            options={{ title: 'Criar Nova Issue' }}
           />
         </>
       )}

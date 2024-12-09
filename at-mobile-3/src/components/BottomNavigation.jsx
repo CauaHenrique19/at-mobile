@@ -5,12 +5,13 @@ import { Ionicons } from "@expo/vector-icons";
 const BottomNavigation = ({ state, descriptors, navigation }) => {
   const routesToIgnore = ["RepositoryDetails", "IssueDetails"];
   const routes = state.routes.filter(
-    route => !routesToIgnore.includes(route.name)
+    (route) => !routesToIgnore.includes(route.name)
   );
 
   return (
     <View style={styles.container}>
-      {routes.map((route, index) => {
+      {routes.map((route) => {
+        const index = state.routes.findIndex((r) => r.name === route.name);
         const { options } = descriptors[route.key];
         const label =
           options.tabBarLabel !== undefined
@@ -33,12 +34,14 @@ const BottomNavigation = ({ state, descriptors, navigation }) => {
           }
         };
 
-        const getIconName = routeName => {
+        const getIconName = (routeName) => {
           switch (routeName) {
             case "Repositories":
               return isFocused ? "code-slash" : "code-slash-outline";
             case "Profile":
               return isFocused ? "person" : "person-outline";
+            case "CreateIssue":
+              return isFocused ? "add-circle" : "add-circle-outline";
             case "Issues":
               return isFocused
                 ? "information-circle"

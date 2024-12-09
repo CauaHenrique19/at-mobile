@@ -54,7 +54,7 @@ const GalleryScreen = ({ navigation }) => {
 
       setImages(newImages);
       setTotalPages(totalPages);
-      setPage(prevPage => (isRefresh ? 1 : prevPage + 1));
+      setPage((prevPage) => (isRefresh ? 1 : prevPage + 1));
     } catch (err) {
       setError(err);
     } finally {
@@ -78,14 +78,14 @@ const GalleryScreen = ({ navigation }) => {
     }
   };
 
-  const handleSearch = query => {
+  const handleSearch = (query) => {
     setCurrentQuery(query);
     setImages([]);
     setPage(1);
     allImagesLoadedRef.current = false;
   };
 
-  const handleImagePress = image => {
+  const handleImagePress = (image) => {
     navigation.navigate("ImageDetail", { image });
   };
 
@@ -131,7 +131,7 @@ const GalleryScreen = ({ navigation }) => {
 
       <FlatList
         data={images}
-        keyExtractor={(item, index) => item.nasa_id || index.toString()}
+        keyExtractor={(item, index) => `${index}-${item.nasa_id}`}
         renderItem={({ item }) => (
           <ImageCard
             image={item}

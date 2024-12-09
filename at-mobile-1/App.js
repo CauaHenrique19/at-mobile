@@ -20,7 +20,7 @@ export default function App() {
             <Stack.Screen
               name="Auth"
               component={AutenticacaoScreen}
-              options={{ title: "Login ou Registro" }}
+              options={{ title: "Login" }}
             />
             <Stack.Screen
               name="Transacoes"

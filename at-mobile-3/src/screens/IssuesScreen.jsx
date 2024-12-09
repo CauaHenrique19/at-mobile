@@ -36,7 +36,7 @@ const IssuesScreen = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const { issues } = await githubService.getUserIssues(pageToFetch, 1);
+      const { issues } = await githubService.getUserIssues(pageToFetch, 10);
 
       if (issues.length === 0) {
         setHasMoreIssues(false);
@@ -44,7 +44,7 @@ const IssuesScreen = ({ navigation }) => {
         return;
       }
 
-      setIssues(prev => (isRefresh ? issues : [...prev, ...issues]));
+      setIssues((prev) => (isRefresh ? issues : [...prev, ...issues]));
       setPage(pageToFetch);
     } catch (error) {
       console.error("Erro ao buscar issues:", error);
@@ -70,7 +70,7 @@ const IssuesScreen = ({ navigation }) => {
     }
   };
 
-  const navigateToIssueDetails = issue => {
+  const navigateToIssueDetails = (issue) => {
     navigation.navigate("IssueDetails", { issue });
   };
 
@@ -129,7 +129,7 @@ const IssuesScreen = ({ navigation }) => {
     <View style={styles.container}>
       <FlatList
         data={issues}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <IssueItem issue={item} onPress={navigateToIssueDetails} />
         )}
