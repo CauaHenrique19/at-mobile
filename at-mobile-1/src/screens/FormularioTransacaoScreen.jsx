@@ -6,9 +6,12 @@ import { useTransactions } from "../context/TransactionContext";
 
 import CurrencyAPI from "../api/currencyApi";
 
-const FormularioTransacaoScreen = ({ navigation }) => {
-  const { addTransaction } = useTransactions();
+const FormularioTransacaoScreen = ({ navigation, route }) => {
+  const { transacoes, setTransacoes, addTransaction } = useTransactions();
 
+  const [title, setTitle] = useState("Nova Transação");
+
+  const [id, setId] = useState(null);
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState("");
   const [data, setData] = useState("");
@@ -17,6 +20,27 @@ const FormularioTransacaoScreen = ({ navigation }) => {
   const [tipo, setTipo] = useState("receita");
   const [moeda, setMoeda] = useState("BRL");
   const [moedas, setMoedas] = useState([]);
+
+  useEffect(() => {
+    const transacao = route.params?.transacao;
+    if (transacao) {
+      const newTitle = "Editar Transação";
+      setTitle(newTitle);
+
+      setId(transacao.id);
+      setDescricao(transacao.descricao);
+      setValor(transacao.valor.toString());
+      setData(transacao.data);
+      setHora(transacao.hora);
+      setCategoria(transacao.categoria);
+      setTipo(transacao.tipo);
+      setMoeda(transacao.moeda);
+
+      navigation.setOptions({
+        title: newTitle,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const fetchMoedas = async () => {
@@ -31,30 +55,40 @@ const FormularioTransacaoScreen = ({ navigation }) => {
   }, []);
 
   const handleSalvar = () => {
-    if (descricao && valor && data && hora && categoria && moeda) {
-      const newTransaction = {
-        id: new Date().getTime(),
-        descricao,
-        valor: Number(valor),
-        data,
-        hora,
-        categoria,
-        tipo,
-        moeda,
-      };
-
-      addTransaction(newTransaction);
-
-      Alert.alert("Transação adicionada com sucesso!");
-      navigation.navigate("Transacoes");
-    } else {
+    if (!descricao || !valor || !data || !hora || !categoria || !moeda) {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
+      return;
     }
+
+    const newTransaction = {
+      id: id || new Date().getTime(),
+      descricao,
+      valor: Number(valor),
+      data,
+      hora,
+      categoria,
+      tipo,
+      moeda,
+    };
+
+    if (id) {
+      const tempTransacoes = transacoes.filter(
+        transacao => transacao.id !== newTransaction.id
+      );
+      tempTransacoes.push(newTransaction);
+      setTransacoes(tempTransacoes);
+      Alert.alert("Transação editada com sucesso!");
+    } else {
+      addTransaction(newTransaction);
+      Alert.alert("Transação adicionada com sucesso!");
+    }
+
+    navigation.navigate("Transacoes");
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Nova Transação</Text>
+      <Text style={styles.title}>{title}</Text>
       <TextInput
         style={styles.input}
         placeholder="Descrição"
@@ -67,6 +101,7 @@ const FormularioTransacaoScreen = ({ navigation }) => {
         keyboardType="numeric"
         value={valor}
         onChangeText={setValor}
+        inputMode="decimal"
       />
       <TextInput
         style={styles.input}

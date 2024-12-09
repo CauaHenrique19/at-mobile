@@ -10,7 +10,9 @@ export const TransactionProvider = ({ children }) => {
   };
 
   return (
-    <TransactionContext.Provider value={{ transacoes, addTransaction }}>
+    <TransactionContext.Provider
+      value={{ transacoes, setTransacoes, addTransaction }}
+    >
       {children}
     </TransactionContext.Provider>
   );
